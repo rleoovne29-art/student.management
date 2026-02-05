@@ -44,14 +44,14 @@ public class StudentService {
     this.latestStudent = newStudent;
   }
 
-  public boolean updateStudentName(String oldName,String newName,String newAge) {
-    Student studentData = student.get(oldName);
+  public boolean updateStudentName(String name,String newName,String newAge) {
+    Student studentData = student.get(name);
     if (studentData != null) {
       studentData.setName(newName);
       studentData.setAge(newAge);
-      student.remove(oldName);
+      student.remove(name);
       student.put(newName, studentData);
-      this.latestStudent = new Student(newName, newAge);
+      this.latestStudent = studentData;
       return true;
     }
     return false;
