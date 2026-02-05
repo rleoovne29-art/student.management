@@ -67,8 +67,15 @@ public class StudentController {
   }
 
   @PostMapping("/studentAge")
-  public void updateStudentAge(@RequestParam String age) {
-    service.updateStudentAge(age);
+  public ResponseEntity<String> updateStudentAge(
+      @RequestParam String name,@RequestParam String age
+  ) {
+    if (service.updateStudentAge(name, age)){
+      return ResponseEntity.ok(name + "さんの年齢を変更しました。");
+    }else{
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(name + "さんは、見つかりませんでした。");
+    }
   }
 
   @PostMapping("/student/add")
@@ -77,3 +84,4 @@ public class StudentController {
     return "登録しました。";
   }
 }
+

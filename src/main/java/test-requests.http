@@ -1,4 +1,0 @@
-### 学生一覧を取得する
-GET http://localhost:8080/students
-### 名前を更新する
-POST http://localhost:8080/studentName?name=NewName

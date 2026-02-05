@@ -1,5 +1,6 @@
 package raisetech.student.management;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class StudentService {
   }
 
   public Map<String, Student> getStudents() {
-    return student;
+    return new HashMap<>(student);
   }
 
   public Student getStudentByName(String name) {
@@ -55,10 +56,14 @@ public class StudentService {
     return false;
   }
 
-  public void updateStudentAge(String newAge) {
-    String currentName = latestStudent.getName();
-    Student updatedStudent = new Student(currentName, newAge);
-    this.latestStudent = updatedStudent;
+  public boolean updateStudentAge(String name,String newAge) {
+    Student studentInMap = student.get(name);
+    if (studentInMap != null) {
+      studentInMap.setAge(newAge);
+      this.latestStudent = studentInMap;
+      return true;
+    }
+    return false;
   }
 
   public boolean deleteStudent(String name){
