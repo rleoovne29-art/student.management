@@ -1,0 +1,8 @@
+### 学生一覧を取得する
+GET http://localhost:8080/students
+### 名前を更新する
+POST http://localhost:8080/studentUpdate?oldName=Nasima&newName=Nasima_New&newAge=26
+### 最新の学生の年齢を更新する（現在の Controller の設計に合わせる場合）
+POST http://localhost:8080/studentAge?age=26
+### 名前を指定して年齢を更新する
+POST http://localhost:8080/studentAge?name=Nasima&age=26

@@ -1,2 +1,2 @@
 README
-# Student.management
+# student.management
