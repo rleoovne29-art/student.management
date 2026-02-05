@@ -35,6 +35,7 @@ public class StudentService {
 
   public void setStudent(String name, String age) {
     this.latestStudent = new Student(name, age);
+    student.put(name, this.latestStudent);
   }
 
   public void addStudent(String name, String age) {

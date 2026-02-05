@@ -37,19 +37,19 @@ public class StudentController {
   }
 
   @PostMapping("/studentInfo")
-  public void setStudent(@RequestParam String oldName,@RequestParam String age){
-    service.setStudent(oldName, age);
+  public void setStudent(@RequestParam String name,@RequestParam String age){
+    service.setStudent(name, age);
   }
 
   @PostMapping("/studentUpdate")
   public ResponseEntity<String> updateStudent(
-      @RequestParam String oldName,
+      @RequestParam String name,
       @RequestParam String newName,
       @RequestParam String newAge
   ){
-    boolean isUpdated = service.updateStudentName(oldName, newName, newAge);
+    boolean isUpdated = service.updateStudentName(name, newName, newAge);
     if (isUpdated) {
-      return ResponseEntity.ok(oldName + " さんを " + newName + " さんに更新しました。");
+      return ResponseEntity.ok(name + " さんを " + newName + " さんに更新しました。");
     }else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
           .body("見つかりませんでした。");
