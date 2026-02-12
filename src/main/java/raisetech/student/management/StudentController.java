@@ -1,87 +1,72 @@
 package raisetech.student.management;
 
-import java.util.Map;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/student")
 public class StudentController {
+
   private final StudentService service;
+
   public StudentController(StudentService service) {
     this.service = service;
   }
 
-  @GetMapping("/studentInfo")
-  public String getStudent(){
-    return service.getStudent();
-  }
-
   @GetMapping("/students")
-  public Map<String, Student> getStudents() {
-    return service.getStudents();
-  }
-
-  @GetMapping("/student/{name}")
-  public String getStudentDetail(@PathVariable String name){
-    Student result = service.getStudentByName(name);
-    if (result == null){
-      return ("見つかりませんでした。");
-    }else{
-      return result.getName() + "さんは" + result.getAge() + "歳です。";
+  public ResponseEntity<List<Student>> getAllStudents() {
+    List<Student> students = service.getAllStudents();
+    if (students.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(students);
+    } else {
+      return ResponseEntity.ok(students);
     }
   }
 
-  @PostMapping("/studentInfo")
-  public void setStudent(@RequestParam String name,@RequestParam String age){
-    service.setStudent(name, age);
+  @PostMapping
+  public ResponseEntity<String> registerStudent(
+      @RequestParam String name,
+      @RequestParam int age,
+      @RequestParam String job
+  ) {
+    service.registerStudent(name, age, job);
+    return ResponseEntity.ok(name + "さんを登録しました。");
   }
 
-  @PostMapping("/studentUpdate")
-  public ResponseEntity<String> updateStudent(
+  @PatchMapping
+  public ResponseEntity<String> updateStudentName(
       @RequestParam String name,
-      @RequestParam String newName,
-      @RequestParam String newAge
-  ){
-    boolean isUpdated = service.updateStudentName(name, newName, newAge);
-    if (isUpdated) {
-      return ResponseEntity.ok(name + " さんを " + newName + " さんに更新しました。");
-    }else {
+      @RequestParam int age,
+      @RequestParam String job
+  ) {
+    boolean updated = service.updateStudent(name, age, job);
+    if (updated) {
+      return ResponseEntity.ok(name + " さんを更新しました。");
+    } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
           .body("見つかりませんでした。");
     }
   }
 
-  @PostMapping("/studentDelete")
-  public ResponseEntity<String> deleteStudent(@RequestParam String name){
-    if(service.deleteStudent(name)){
+  @DeleteMapping("/{name}")
+  public ResponseEntity<String> deleteStudent(@PathVariable String name) {
+    boolean deleted = service.deleteStudent(name);
+    if (deleted) {
       return ResponseEntity.ok(name + "さんを削除しました");
-    }else{
+    } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
           .body(name + "さんは、見つかりませんでした。");
     }
-  }
-
-  @PostMapping("/studentAge")
-  public ResponseEntity<String> updateStudentAge(
-      @RequestParam String name,@RequestParam String age
-  ) {
-    if (service.updateStudentAge(name, age)){
-      return ResponseEntity.ok(name + "さんの年齢を変更しました。");
-    }else{
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(name + "さんは、見つかりませんでした。");
-    }
-  }
-
-  @PostMapping("/student/add")
-  public String addStudent(@RequestParam String name,@RequestParam String age){
-    service.addStudent(name, age);
-    return "登録しました。";
   }
 }
 

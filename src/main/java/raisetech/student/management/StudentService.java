@@ -1,78 +1,31 @@
 package raisetech.student.management;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StudentService {
 
-  private Student latestStudent = new Student("Kana", "26");
-  private final Map<String, Student> student = new ConcurrentHashMap<>();
+  private final StudentRepository repository;
 
-  public StudentService() {
-    Student nasima = new Student("Nasima", "25");
-    Student komine = new Student("Komine", "32");
-
-    student.put("Nasima", nasima);
-    student.put("Komine", komine);
-
-    this.latestStudent = komine;
+  public StudentService(StudentRepository repository) {
+    this.repository = repository;
   }
 
-  public String getStudent() {
-    return latestStudent.getName() + " " + latestStudent.getAge() + " ";
+  public List<Student> getAllStudents() {
+    return repository.findAll();
   }
 
-  public Map<String, Student> getStudents() {
-    return new HashMap<>(student);
+  public boolean registerStudent(String name, int age, String job) {
+    return repository.registerStudent(name, age, job) > 0;
   }
 
-  public Student getStudentByName(String name) {
-    return student.get(name);
+  public boolean updateStudent(String name, int age, String job) {
+    return repository.updateStudent(name, age, job) > 0;
   }
 
-  public void setStudent(String name, String age) {
-    this.latestStudent = new Student(name, age);
-    student.put(name, this.latestStudent);
-  }
-
-  public void addStudent(String name, String age) {
-    Student newStudent = new Student(name, age);
-    student.put(name, newStudent);
-    this.latestStudent = newStudent;
-  }
-
-  public boolean updateStudentName(String name,String newName,String newAge) {
-    Student studentData = student.get(name);
-    if (studentData != null) {
-      studentData.setName(newName);
-      studentData.setAge(newAge);
-      student.remove(name);
-      student.put(newName, studentData);
-      this.latestStudent = studentData;
-      return true;
-    }
-    return false;
-  }
-
-  public boolean updateStudentAge(String name,String newAge) {
-    Student studentInMap = student.get(name);
-    if (studentInMap != null) {
-      studentInMap.setAge(newAge);
-      this.latestStudent = studentInMap;
-      return true;
-    }
-    return false;
-  }
-
-  public boolean deleteStudent(String name){
-    if (student.containsKey(name)) {
-      student.remove(name);
-      return true;
-    }
-    return false;
+  public boolean deleteStudent(String name) {
+    return repository.deleteStudent(name) > 0;
   }
 }
 
