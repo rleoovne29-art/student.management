@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/students")
 public class StudentController {
 
   private final StudentService service;
@@ -23,7 +23,7 @@ public class StudentController {
     this.service = service;
   }
 
-  @GetMapping("/students")
+  @GetMapping
   public ResponseEntity<List<Student>> getAllStudents() {
     List<Student> students = service.getAllStudents();
     return ResponseEntity.ok(students);
@@ -40,7 +40,7 @@ public class StudentController {
       return ResponseEntity.ok("登録成功。ID=" + service.getLastInsertedId());
     }else {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body("登録できませんでした。");
+          .body("登録失敗。");
     }
   }
 
@@ -53,10 +53,10 @@ public class StudentController {
   ) {
     boolean updated = service.updateStudent(id, name, age, job);
     if (updated) {
-      return ResponseEntity.ok(name + " さんを更新しました。");
+      return ResponseEntity.ok("更新成功。ID=" + id);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body("見つかりませんでした。");
+          .body("更新失敗。");
     }
   }
 
@@ -64,10 +64,10 @@ public class StudentController {
   public ResponseEntity<String> deleteStudent(@PathVariable Integer id) {
     boolean deleted = service.deleteStudent(id);
     if (deleted) {
-      return ResponseEntity.ok(id + "さんを削除しました");
+      return ResponseEntity.ok("削除成功。ID=" + id);
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(id + "さんは、見つかりませんでした。");
+          .body("削除失敗。");
     }
   }
 }
