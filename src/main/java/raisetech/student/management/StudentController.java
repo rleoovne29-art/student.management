@@ -1,87 +1,74 @@
 package raisetech.student.management;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/students")
 public class StudentController {
+
   private final StudentService service;
+
   public StudentController(StudentService service) {
     this.service = service;
   }
 
-  @GetMapping("/studentInfo")
-  public String getStudent(){
-    return service.getStudent();
+  @GetMapping
+  public ResponseEntity<List<Student>> getAllStudents() {
+    List<Student> students = service.getAllStudents();
+    return ResponseEntity.ok(students);
   }
 
-  @GetMapping("/students")
-  public Map<String, Student> getStudents() {
-    return service.getStudents();
-  }
-
-  @GetMapping("/student/{name}")
-  public String getStudentDetail(@PathVariable String name){
-    Student result = service.getStudentByName(name);
-    if (result == null){
-      return ("見つかりませんでした。");
-    }else{
-      return result.getName() + "さんは" + result.getAge() + "歳です。";
-    }
-  }
-
-  @PostMapping("/studentInfo")
-  public void setStudent(@RequestParam String name,@RequestParam String age){
-    service.setStudent(name, age);
-  }
-
-  @PostMapping("/studentUpdate")
-  public ResponseEntity<String> updateStudent(
+  @PostMapping
+  public ResponseEntity<String> registerStudent(
       @RequestParam String name,
-      @RequestParam String newName,
-      @RequestParam String newAge
-  ){
-    boolean isUpdated = service.updateStudentName(name, newName, newAge);
-    if (isUpdated) {
-      return ResponseEntity.ok(name + " さんを " + newName + " さんに更新しました。");
-    }else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body("見つかりませんでした。");
-    }
-  }
-
-  @PostMapping("/studentDelete")
-  public ResponseEntity<String> deleteStudent(@RequestParam String name){
-    if(service.deleteStudent(name)){
-      return ResponseEntity.ok(name + "さんを削除しました");
-    }else{
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(name + "さんは、見つかりませんでした。");
-    }
-  }
-
-  @PostMapping("/studentAge")
-  public ResponseEntity<String> updateStudentAge(
-      @RequestParam String name,@RequestParam String age
+      @RequestParam int age,
+      @RequestParam String job
   ) {
-    if (service.updateStudentAge(name, age)){
-      return ResponseEntity.ok(name + "さんの年齢を変更しました。");
-    }else{
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(name + "さんは、見つかりませんでした。");
+    boolean result = service.registerStudent(name, age, job);
+    if (result){
+      return ResponseEntity.ok("登録成功。ID=" + service.getLastInsertedId());
+    }else {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("登録失敗。");
     }
   }
 
-  @PostMapping("/student/add")
-  public String addStudent(@RequestParam String name,@RequestParam String age){
-    service.addStudent(name, age);
-    return "登録しました。";
+  @PatchMapping("/{id}")
+  public ResponseEntity<String> updateStudentName(
+      @PathVariable Integer id,
+      @RequestParam String name,
+      @RequestParam int age,
+      @RequestParam String job
+  ) {
+    boolean updated = service.updateStudent(id, name, age, job);
+    if (updated) {
+      return ResponseEntity.ok("更新成功。ID=" + id);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("更新失敗。");
+    }
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<String> deleteStudent(@PathVariable Integer id) {
+    boolean deleted = service.deleteStudent(id);
+    if (deleted) {
+      return ResponseEntity.ok("削除成功。ID=" + id);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("削除失敗。");
+    }
   }
 }
 
