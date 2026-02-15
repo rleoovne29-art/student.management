@@ -1,23 +1,35 @@
 package raisetech.student.management;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
+@Entity
+
 public class Student {
-  private int id;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
   private String name;
   private int age;
   private String job;
 
-  public Student(int id,String name, int age, String job) {
-    this.id = id;
+  public Student(){
+  }
+
+  public Student(String name, int age, String job) {
     this.name = name;
     this.age = age;
     this.job = job;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

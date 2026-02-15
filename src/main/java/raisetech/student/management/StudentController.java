@@ -1,6 +1,7 @@
 package raisetech.student.management;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,12 +26,7 @@ public class StudentController {
   @GetMapping("/students")
   public ResponseEntity<List<Student>> getAllStudents() {
     List<Student> students = service.getAllStudents();
-    if (students.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(students);
-    } else {
-      return ResponseEntity.ok(students);
-    }
+    return ResponseEntity.ok(students);
   }
 
   @PostMapping
@@ -39,17 +35,23 @@ public class StudentController {
       @RequestParam int age,
       @RequestParam String job
   ) {
-    service.registerStudent(name, age, job);
-    return ResponseEntity.ok(name + "さんを登録しました。");
+    boolean result = service.registerStudent(name, age, job);
+    if (result){
+      return ResponseEntity.ok("登録成功。ID=" + service.getLastInsertedId());
+    }else {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("登録できませんでした。");
+    }
   }
 
-  @PatchMapping
+  @PatchMapping("/{id}")
   public ResponseEntity<String> updateStudentName(
+      @PathVariable Integer id,
       @RequestParam String name,
       @RequestParam int age,
       @RequestParam String job
   ) {
-    boolean updated = service.updateStudent(name, age, job);
+    boolean updated = service.updateStudent(id, name, age, job);
     if (updated) {
       return ResponseEntity.ok(name + " さんを更新しました。");
     } else {
@@ -58,14 +60,14 @@ public class StudentController {
     }
   }
 
-  @DeleteMapping("/{name}")
-  public ResponseEntity<String> deleteStudent(@PathVariable String name) {
-    boolean deleted = service.deleteStudent(name);
+  @DeleteMapping("/{id}")
+  public ResponseEntity<String> deleteStudent(@PathVariable String id) {
+    boolean deleted = service.deleteStudent(id);
     if (deleted) {
-      return ResponseEntity.ok(name + "さんを削除しました");
+      return ResponseEntity.ok(id + "さんを削除しました");
     } else {
       return ResponseEntity.status(HttpStatus.NOT_FOUND)
-          .body(name + "さんは、見つかりませんでした。");
+          .body(id + "さんは、見つかりませんでした。");
     }
   }
 }

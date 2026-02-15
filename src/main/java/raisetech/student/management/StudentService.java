@@ -16,16 +16,29 @@ public class StudentService {
     return repository.findAll();
   }
 
+  private Integer lastInsertedId;
+
+  public Integer getLastInsertedId() {
+    return lastInsertedId;
+  }
+
   public boolean registerStudent(String name, int age, String job) {
-    return repository.registerStudent(name, age, job) > 0;
+    Student student = new Student(name, age, job);
+    int result = repository.registerStudent(student);
+    if (result > 0){
+      lastInsertedId = student.getId();
+      System.out.println("登録された id: " + student.getId());
+    }
+      return result > 0;
   }
 
-  public boolean updateStudent(String name, int age, String job) {
-    return repository.updateStudent(name, age, job) > 0;
+  public boolean updateStudent(Integer id, String name, int age, String job) {
+    int result = repository.updateStudent(id, name, age, job);
+    return result > 0;
   }
 
-  public boolean deleteStudent(String name) {
-    return repository.deleteStudent(name) > 0;
+  public boolean deleteStudent(String id) {
+    return repository.deleteStudent(id) > 0;
   }
 }
 
