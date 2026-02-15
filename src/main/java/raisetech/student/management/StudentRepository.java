@@ -21,13 +21,13 @@ public interface StudentRepository {
 
   @Update("UPDATE student SET name = #{name}, age = #{age} , job = #{job} WHERE id = #{id}")
   int updateStudent(
-      @Param("id") int id,
+      @Param("id") Integer id,
       @Param("name") String name,
       @Param("age") int age,
       @Param("job") String job
   );
 
   @Delete("DELETE FROM student WHERE id = #{id}")
-  int deleteStudent(String id);
+  int deleteStudent(Integer id);
 
 }

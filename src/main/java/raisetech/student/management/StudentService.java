@@ -1,10 +1,14 @@
 package raisetech.student.management;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StudentService {
+
+  private static final Logger log = LoggerFactory.getLogger(StudentService.class);
 
   private final StudentRepository repository;
 
@@ -27,7 +31,7 @@ public class StudentService {
     int result = repository.registerStudent(student);
     if (result > 0){
       lastInsertedId = student.getId();
-      System.out.println("登録された id: " + student.getId());
+      log.info("登録された id: {}", student.getId());
     }
       return result > 0;
   }
@@ -37,7 +41,7 @@ public class StudentService {
     return result > 0;
   }
 
-  public boolean deleteStudent(String id) {
+  public boolean deleteStudent(Integer id) {
     return repository.deleteStudent(id) > 0;
   }
 }
