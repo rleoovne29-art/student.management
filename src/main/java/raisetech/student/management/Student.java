@@ -1,50 +1,34 @@
 package raisetech.student.management;
 
+import lombok.Getter;
+import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@Getter
+@Setter
+@JsonPropertyOrder({
+    "id",
+    "name",
+    "kana",
+    "age",
+    "nickname",
+    "email",
+    "region",
+    "gender"
+})
+
 public class Student {
 
-  private Integer id;
+  private String id;
   private String name;
+  private String kana;
   private int age;
-  private String job;
+  private String nickname;
+  private String email;
+  private String region;
+  private String gender;
 
   public Student(){
   }
 
-  public Student(String name, int age, String job) {
-    this.name = name;
-    this.age = age;
-    this.job = job;
-  }
-
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getAge(){
-    return age;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void setAge(int age) {
-    this.age = age;
-  }
-
-  public String getJob() {
-    return job;
-  }
-
-  public void setJob(String job) {
-    this.job = job;
-  }
 }

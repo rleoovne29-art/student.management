@@ -8,18 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/students")
-public class StudentController {
+public class StudentCourseController {
+  private final StudentCourseService service;
 
-  private final StudentService service;
-
-  public StudentController(StudentService service) {
+  public StudentCourseController(StudentCourseService service) {
     this.service = service;
   }
 
-  @GetMapping
-  public ResponseEntity<List<Student>> getStudentList() {
-    List<Student> students = service.getAllStudents();
-    return ResponseEntity.ok(students);
+  @GetMapping ("/courses")
+  public ResponseEntity<List<StudentCourse>> getStudentCourseList() {
+    List<StudentCourse> studentCourses = service.getAllStudentsCourses();
+    return ResponseEntity.ok(studentCourses);
   }
 }
-
