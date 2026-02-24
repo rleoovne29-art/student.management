@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import raisetech.student.management.date.Student;
+import raisetech.student.management.date.StudentCourse;
 
 @Mapper
 public interface StudentRepository {
@@ -22,6 +23,7 @@ public interface StudentRepository {
       @Result(property = "region", column = "region"),
       @Result(property = "gender", column = "gender")
   })
+
   List<Student> search();
 
   @Select("SELECT * FROM students WHERE age BETWEEN #{minAge} AND #{maxAge}")

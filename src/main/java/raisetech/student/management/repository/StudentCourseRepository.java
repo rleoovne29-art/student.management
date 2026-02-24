@@ -23,8 +23,7 @@ public interface StudentCourseRepository {
 
   List<StudentCourse> search();
 
-  @Select("SELECT * FROM Students_courses WHERE course_name = #{courseName}")
-
+  @Select("SELECT * FROM students_courses WHERE course_name = #{courseName}")
   @ResultMap("StudentCourseMap")
   List<StudentCourse> searchByCourseName(String courseName);
 }

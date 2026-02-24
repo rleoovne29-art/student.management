@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.service.StudentService;
@@ -21,7 +22,7 @@ public class StudentController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Student>> getStudentList(int minAge , int maxAge) {
+  public ResponseEntity<List<Student>> getStudentList(@RequestParam int minAge ,@RequestParam int maxAge) {
     List<Student> students = service.getAllStudents(minAge, maxAge);
     return ResponseEntity.ok(students);
   }
