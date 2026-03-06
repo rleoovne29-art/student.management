@@ -2,6 +2,7 @@ package raisetech.student.management.date;
 
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,20 +11,21 @@ import lombok.Setter;
 
 @JsonPropertyOrder({
     "id",
-    "studentsId",
+    "studentId",
     "courseName",
     "startDate",
     "expectedEndDate"
 })
 
-public class StudentCourse {
+public class StudentsCourses {
 
   private String id;
-  private String studentsId;
+  private String studentId;
   private String courseName;
   private LocalDate startDate;
   private LocalDate expectedEndDate;
 
-  public StudentCourse(){
+  public StudentsCourses(){
   }
+
 }

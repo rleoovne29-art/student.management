@@ -14,7 +14,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "nickname",
     "email",
     "region",
-    "gender"
+    "gender",
+    "remark",
+    "isDeleted"
 })
 
 public class Student {
@@ -27,6 +29,8 @@ public class Student {
   private String email;
   private String region;
   private String gender;
+  private String remark;
+  private boolean isDeleted;
 
   public Student(){
   }
