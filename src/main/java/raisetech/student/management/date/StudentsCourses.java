@@ -2,6 +2,7 @@ package raisetech.student.management.date;
 
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,7 @@ import lombok.Setter;
     "expectedEndDate"
 })
 
-public class StudentCourse {
+public class StudentsCourses {
 
   private String id;
   private String studentsId;
@@ -24,6 +25,7 @@ public class StudentCourse {
   private LocalDate startDate;
   private LocalDate expectedEndDate;
 
-  public StudentCourse(){
+  public StudentsCourses(){
   }
+
 }
