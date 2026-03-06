@@ -41,7 +41,7 @@ public interface StudentRepository {
   List<StudentsCourses> searchStudentsCourses();
 
   @Insert(
-      "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, isDeleted) " +
+      "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, is_deleted) " +
       "VALUES (#{id}, #{name}, #{kana}, #{age}, #{nickname}, #{email}, #{region}, #{gender}, #{remark}, #{isDeleted})")
   void insertStudent(Student student);
 
