@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentsCourses;
@@ -52,19 +51,19 @@ public class StudentController {
   }
 
   @PostMapping("/registerStudent")
-  public String registerStudent(@ModelAttribute StudentDetail StudentDetail,
+  public String registerStudent(@ModelAttribute StudentDetail studentDetail,
       BindingResult result) {
     if (result.hasErrors()) {
       return "registerStudent";
     }
     //新規受講生登録情報を登録する処理を実装する。
-    Student student = StudentDetail.getStudent();
+    Student student = studentDetail.getStudent();
     String id = service.generateRandomId();
     student.setId(id);
     service.registerStudent(student);
     //コース情報も一緒に登録できるように実装する。コースは単体でいい。
-    StudentsCourses sc = StudentDetail.getStudentsCourses().get(0);
-    sc.setStudentsId(id);
+    StudentsCourses sc = studentDetail.getStudentsCourses().get(0);
+    sc.setStudentId(id);
     service.registerStudentsCourses(sc);
     return "redirect:/studentList";
   }

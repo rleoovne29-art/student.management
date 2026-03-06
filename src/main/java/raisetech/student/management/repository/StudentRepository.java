@@ -21,7 +21,9 @@ public interface StudentRepository {
       @Result(property = "nickname", column = "nickname"),
       @Result(property = "email", column = "email"),
       @Result(property = "region", column = "region"),
-      @Result(property = "gender", column = "gender")
+      @Result(property = "gender", column = "gender"),
+      @Result(property = "remark", column = "remark"),
+      @Result(property = "isDeleted", column = "is_deleted")
   })
 
   List<Student> search();
@@ -30,7 +32,7 @@ public interface StudentRepository {
 
   @Results(id = "StudentCourseMap", value = {
       @Result(property = "id", column = "id"),
-      @Result(property = "studentsId", column = "students_id"),
+      @Result(property = "studentId", column = "student_id"),
       @Result(property = "courseName", column = "course_name"),
       @Result(property = "startDate", column = "start_date"),
       @Result(property = "expectedEndDate", column = "expected_end_date")
@@ -44,7 +46,7 @@ public interface StudentRepository {
   void insertStudent(Student student);
 
   @Insert("INSERT INTO students_courses (id, students_id, course_name) "
-      + "VALUES (#{id}, #{studentsId}, #{courseName}) ")
+      + "VALUES (#{id}, #{studentId}, #{courseName}) ")
   void insertStudentsCourses(StudentsCourses sc);
 
 }
