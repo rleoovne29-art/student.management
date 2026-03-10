@@ -26,9 +26,6 @@ dependencies {
 	//Apache Commons Lang ユーティリティ
 	implementation 'org.apache.commons:commons-lang3:3.20.0'
 
-	//Bean Validation（Jakarta Validation）
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-
 	//Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

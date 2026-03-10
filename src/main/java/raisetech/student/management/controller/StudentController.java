@@ -1,7 +1,8 @@
 package raisetech.student.management.controller;
 
-import jakarta.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class StudentController {
     List<StudentsCourses> courses = service.searchStudentsCourseList()
         .stream()
         .filter(c -> c.getStudentsId().equals(id))
-        .toList();
+        .collect(Collectors.toList());
     StudentDetail detail = new StudentDetail();
     detail.setStudent(student);
     detail.setStudentsCourses(courses);
@@ -71,7 +72,7 @@ public class StudentController {
     List<StudentsCourses> courses = service.searchStudentsCourseList()
         .stream()
         .filter(c -> c.getStudentsId().equals(id))
-        .toList();
+        .collect(Collectors.toList());
     for (StudentsCourses sc : courses) {
       sc.setStudentsId(id);
     }
@@ -102,7 +103,7 @@ public class StudentController {
   }
 
   @PostMapping("/updateStudent")
-  public String updateStudent(@Valid @ModelAttribute StudentDetail studentDetail,
+  public String updateStudent(@ModelAttribute StudentDetail studentDetail,
       BindingResult result) {
     if (result.hasErrors()) {
       return "updateStudent";

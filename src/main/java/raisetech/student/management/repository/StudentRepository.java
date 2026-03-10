@@ -60,14 +60,9 @@ public interface StudentRepository {
       + "remark = #{remark}, is_deleted = #{isDeleted} WHERE id = #{id}")
   void updateStudent(Student student);
 
-  @Update("""
-    UPDATE students_courses SET
-      students_id = #{studentsId},
-      course_name = #{courseName},
-      start_date = #{startDate},
-      expected_end_date = #{expectedEndDate}
-    WHERE id = #{id}
-""")
+  @Update("UPDATE students_courses SET " +
+          "students_id = #{studentsId}, course_name = #{courseName}, " +
+          "start_date = #{startDate}, expected_end_date = #{expectedEndDate}WHERE id = #{id} ")
   void updateStudentsCourses(StudentsCourses sc);
 
 
