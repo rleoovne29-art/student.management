@@ -32,7 +32,7 @@ public interface StudentRepository {
   @Select("SELECT * FROM students_courses")
   @Results(id = "StudentCourseMap", value = {
       @Result(property = "id", column = "id"),
-      @Result(property = "studentId", column = "students_id"),
+      @Result(property = "studentsId", column = "students_id"),
       @Result(property = "courseName", column = "course_name"),
       @Result(property = "startDate", column = "start_date"),
       @Result(property = "expectedEndDate", column = "expected_end_date")
@@ -45,24 +45,24 @@ public interface StudentRepository {
   Student findStudentById(String id);
 
   @Insert(
-      "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, isDeleted) " +
+      "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, is_deleted) " +
       "VALUES (#{id}, #{name}, #{kana}, #{age}, #{nickname}, #{email}, #{region}, #{gender}, #{remark}, #{isDeleted})")
   void insertStudent(Student student);
 
   @Insert("INSERT INTO students_courses ("
       + "id, students_id, course_name, start_date, expected_end_date) "
-      + "VALUES (#{id}, #{studentId}, #{courseName}, #{startDate}, #{expectedEndDate}) ")
+      + "VALUES (#{id}, #{studentsId}, #{courseName}, #{startDate}, #{expectedEndDate}) ")
   void insertStudentsCourses(StudentsCourses sc);
 
   @Update("UPDATE students SET "
       + "name = #{name}, kana = #{kana}, age = #{age}, nickname = #{nickname}, "
       + "email = #{email},region = #{region}, gender = #{gender}, "
-      + "remark = #{remark}, isDeleted = #{isDeleted} WHERE id = #{id}")
+      + "remark = #{remark}, is_deleted = #{isDeleted} WHERE id = #{id}")
   void updateStudent(Student student);
 
   @Update("""
     UPDATE students_courses SET
-      students_id = #{studentId},
+      students_id = #{studentsId},
       course_name = #{courseName},
       start_date = #{startDate},
       expected_end_date = #{expectedEndDate}

@@ -33,23 +33,6 @@ public class StudentController {
   public String getStudentList(Model model) {
     List<Student> students = service.searchStudentList();
     List<StudentsCourses> studentsCourses = service.searchStudentsCourseList();
-
-    students.forEach(
-        s -> System.out.println("Student: " + s.getId() + " / " + s.getName())
-    );
-    studentsCourses.forEach(
-        c -> System.out.println("Course: " + c.getStudentId() + " / " + c.getCourseName())
-    );
-
-    studentsCourses.forEach(c ->
-        System.out.println(
-            "Course: " + c.getStudentId()
-                + " / " + c.getCourseName()
-                + " / start=" + c.getStartDate()
-                + " / end=" + c.getExpectedEndDate()
-        )
-    );
-
     model.addAttribute("studentList",
         converter.convertStudentDetails(students, studentsCourses));
     return "studentList";
@@ -73,19 +56,11 @@ public class StudentController {
     Student student = service.searchStudentById(id);
     List<StudentsCourses> courses = service.searchStudentsCourseList()
         .stream()
-        .filter(c -> c.getStudentId().equals(id))
+        .filter(c -> c.getStudentsId().equals(id))
         .toList();
     StudentDetail detail = new StudentDetail();
     detail.setStudent(student);
     detail.setStudentsCourses(courses);
-
-    for (StudentsCourses sc : courses) {
-      System.out.println("GET時のコース: index=" + courses.indexOf(sc)
-          + " / id=" + sc.getId()
-          + " / studentId=" + sc.getStudentId()
-          + " / courseName=" + sc.getCourseName());
-    }
-
     model.addAttribute("studentDetail", detail);
     return "student";
   }
@@ -95,33 +70,14 @@ public class StudentController {
     Student student = service.searchStudentById(id);
     List<StudentsCourses> courses = service.searchStudentsCourseList()
         .stream()
-        .filter(c -> c.getStudentId().equals(id))
+        .filter(c -> c.getStudentsId().equals(id))
         .toList();
     for (StudentsCourses sc : courses) {
-      sc.setStudentId(id);
+      sc.setStudentsId(id);
     }
     StudentDetail detail = new StudentDetail();
     detail.setStudent(student);
     detail.setStudentsCourses(courses);
-
-    for (int i = 0; i < detail.getStudentsCourses().size(); i++) {
-      StudentsCourses sc = detail.getStudentsCourses().get(i);
-      System.out.println("Thymeleafに渡すコース: index=" + i
-          + " / id=" + sc.getId()
-          + " / studentId=" + sc.getStudentId()
-          + " / courseName=" + sc.getCourseName());
-    }
-
-    for (StudentsCourses sc : courses) {
-      System.out.println(
-          "GET時のコース: id=" + sc.getId()
-              + " / courseName=" + sc.getCourseName()
-              + " / startDate=" + sc.getStartDate()
-              + " / expectedEndDate=" + sc.getExpectedEndDate()
-      );
-    }
-
-
     model.addAttribute("studentDetail", detail);
     return "updateStudent";
   }
@@ -140,7 +96,7 @@ public class StudentController {
     service.registerStudent(student);
     //コース情報も一緒に登録できるように実装する。コースは単体でいい。
     StudentsCourses sc = studentDetail.getStudentsCourses().get(0);
-    sc.setStudentId(id);
+    sc.setStudentsId(id);
     service.registerStudentsCourses(sc);
     return "redirect:/studentList";
   }
@@ -148,16 +104,6 @@ public class StudentController {
   @PostMapping("/updateStudent")
   public String updateStudent(@Valid @ModelAttribute StudentDetail studentDetail,
       BindingResult result) {
-
-    System.out.println("POST受信 studentsCourses size=" + studentDetail.getStudentsCourses().size());
-    for (StudentsCourses sc : studentDetail.getStudentsCourses()) {
-      System.out.println("POST受信: id=" + sc.getId()
-          + " / studentId=" + sc.getStudentId()
-          + " / courseName=" + sc.getCourseName()
-          + " / startDate=" + sc.getStartDate()
-          + " / expectedEndDate=" + sc.getExpectedEndDate());
-    }
-
     if (result.hasErrors()) {
       return "updateStudent";
     }

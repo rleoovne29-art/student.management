@@ -50,7 +50,7 @@
   <h2>コース情報</h2>
   <div th:each="course, iStat : *{studentsCourses}">
     <input type="hidden" th:field="*{studentsCourses[__${iStat.index}__].id}" />
-    <input type="hidden" th:field="*{studentsCourses[__${iStat.index}__].studentId}" />
+    <input type="hidden" th:field="*{studentsCourses[__${iStat.index}__].studentsId}" />
     <div>
       <label th:for="'courseName' + ${iStat.index}">コース名</label>
       <input type="text" th:id="'courseName' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].courseName}" required />
