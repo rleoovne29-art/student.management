@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>受講生登録</title>
+  <title>更新</title>
 </head>
 <body>
-<h1>受講生登録</h1>
-<form th:action="@{/registerStudent}" th:object="${studentDetail}" method="post">
+<h1>受講生情報</h1>
+<p>courses size: <span th:text="${#lists.size(studentDetail.studentsCourses)}"></span></p>
+<form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
+  <input type="hidden" th:field="*{student.id}" />
   <div>
     <label for="name">名前</label>
     <input type="text" id="name" th:field="*{student.name}" required/>
@@ -45,16 +47,27 @@
     <label for="remark">備考</label>
     <textarea id="remark" th:field="*{student.remark}"></textarea>
   </div>
-  <div>
-    <button type="submit">登録</button>
+  <h2>コース情報</h2>
+  <div th:each="course, iStat : *{studentsCourses}">
+    <input type="hidden" th:field="*{studentsCourses[__${iStat.index}__].id}" />
+    <input type="hidden" th:field="*{studentsCourses[__${iStat.index}__].studentId}" />
+    <div>
+      <label th:for="'courseName' + ${iStat.index}">コース名</label>
+      <input type="text" th:id="'courseName' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].courseName}" required />
+    </div>
+    <div>
+      <label th:for="'startDate' + ${iStat.index}">開始日</label>
+      <input type="date" th:id="'startDate' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].startDate}" required />
+    </div>
+    <div>
+      <label th:for="'expectedEndDate' + ${iStat.index}">終了予定日</label>
+      <input type="date" th:id="'expectedEndDate' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].expectedEndDate}" required />
+    </div>
+    <hr>
   </div>
-  <select th:field="*{studentsCourses[0].courseName}">
-    <option value="">コースを選択してください</option>
-    <option th:each="course : ${courseList}"
-            th:value="${course.name}"
-            th:text="${course.name}">
-    </option>
-  </select>
+  <div>
+    <button type="submit">更新</button>
+  </div>
 </form>
 </body>
 </html>

@@ -2,7 +2,6 @@ package raisetech.student.management.date;
 
 import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 
