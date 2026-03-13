@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "region",
     "gender",
     "remark",
-    "isDeleted"
+    "deleted"
 })
 
 public class Student {
@@ -30,7 +30,7 @@ public class Student {
   private String region;
   private String gender;
   private String remark;
-  private boolean isDeleted;
+  private boolean deleted;
 
   public Student(){
   }

@@ -13,7 +13,7 @@ import raisetech.student.management.date.StudentsCourses;
 @Mapper
 public interface StudentRepository {
 
-  @Select("SELECT * FROM students")
+  @Select("SELECT * FROM students WHERE is_deleted = 0 ")
   @Results(id = "StudentMap", value = {
       @Result(property = "id", column = "id"),
       @Result(property = "name", column = "name"),
@@ -24,7 +24,7 @@ public interface StudentRepository {
       @Result(property = "region", column = "region"),
       @Result(property = "gender", column = "gender"),
       @Result(property = "remark", column = "remark"),
-      @Result(property = "isDeleted", column = "is_deleted")
+      @Result(property = "deleted", column = "is_deleted")
   })
 
   List<Student> search();
@@ -46,7 +46,7 @@ public interface StudentRepository {
 
   @Insert(
       "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, is_deleted) " +
-      "VALUES (#{id}, #{name}, #{kana}, #{age}, #{nickname}, #{email}, #{region}, #{gender}, #{remark}, #{isDeleted})")
+      "VALUES (#{id}, #{name}, #{kana}, #{age}, #{nickname}, #{email}, #{region}, #{gender}, #{remark}, false)")
   void insertStudent(Student student);
 
   @Insert("INSERT INTO students_courses ("
@@ -57,12 +57,12 @@ public interface StudentRepository {
   @Update("UPDATE students SET "
       + "name = #{name}, kana = #{kana}, age = #{age}, nickname = #{nickname}, "
       + "email = #{email},region = #{region}, gender = #{gender}, "
-      + "remark = #{remark}, is_deleted = #{isDeleted} WHERE id = #{id}")
+      + "remark = #{remark}, is_deleted = #{deleted} WHERE id = #{id}")
   void updateStudent(Student student);
 
   @Update("UPDATE students_courses SET " +
           "students_id = #{studentsId}, course_name = #{courseName}, " +
-          "start_date = #{startDate}, expected_end_date = #{expectedEndDate} WHERE id = #{id} ")
+          "start_date = #{startDate}, expected_end_date = #{expectedEndDate}WHERE id = #{id} ")
   void updateStudentsCourses(StudentsCourses sc);
 
 
