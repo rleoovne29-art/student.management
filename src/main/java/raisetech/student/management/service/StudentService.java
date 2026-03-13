@@ -1,5 +1,6 @@
 package raisetech.student.management.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,21 +39,39 @@ public class StudentService {
     return repository.searchStudentsCourses();
   }
 
+  public Student searchStudentById(String id) {
+    return repository.findStudentById(id);
+  }
+
   public void registerStudent(Student student) {
     repository.insertStudent(student);
   }
 
   public void registerStudentsCourses(StudentsCourses sc) {
     sc.setId(generateRandomId());
+    sc.setStartDate(LocalDateTime.now().toLocalDate());
+    sc.setExpectedEndDate(LocalDateTime.now().plusYears(1).toLocalDate());
     repository.insertStudentsCourses(sc);
+  }
+
+  public void updateStudent(Student student) {
+    repository.updateStudent(student);
+  }
+
+  public void updateStudentsCourses(StudentsCourses sc) {
+    repository.updateStudentsCourses(sc);
   }
 
   public List<Course> getAllCourses() {
     List<Course> list = new ArrayList<>();
     Course c1 = new Course();
     c1.setName("Java基礎");
+    c1.setStartDate(LocalDateTime.now());
+    c1.setExpectedEndDate(LocalDateTime.now().plusYears(1));
     Course c2 = new Course();
     c2.setName("Spring入門");
+    c2.setStartDate(LocalDateTime.now());
+    c2.setExpectedEndDate(LocalDateTime.now().plusYears(1));
     list.add(c1);
     list.add(c2);
     return list;

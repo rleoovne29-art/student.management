@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>受講生情報　詳細</title>
+</head>
+<body>
+<h1>受講生詳細</h1>
+
+<p>名前：<span th:text="${studentDetail.student.name}"></span></p>
+<p>カナ：<span th:text="${studentDetail.student.kana}"></span></p>
+<p>年齢：<span th:text="${studentDetail.student.age}"></span></p>
+<p>ニックネーム：<span th:text="${studentDetail.student.nickname}"></span></p>
+<p>メール：<span th:text="${studentDetail.student.email}"></span></p>
+<p>地域：<span th:text="${studentDetail.student.region}"></span></p>
+<p>性別：<span th:text="${studentDetail.student.gender}"></span></p>
+<p>備考：<span th:text="${studentDetail.student.remark}"></span></p>
+
+<h2>コース一覧</h2>
+<div th:each="course : ${studentDetail.studentsCourses}">
+  <p>コース名：<span th:text="${course.courseName}"></span></p>
+  <p>開始日：<span th:text="${course.startDate}"></span></p>
+  <p>終了予定日：<span th:text="${course.expectedEndDate}"></span></p>
+  <hr>
+</div>
+
+<!-- ★ 更新画面へのリンク -->
+<a th:href="@{'/updateStudent/' + ${studentDetail.student.id}}">この受講生を編集する</a>
+<br><br>
+<!-- ★ 一覧へ戻る -->
+<a th:href="@{/studentList}">一覧に戻る</a>
+
+</body>
+</html>

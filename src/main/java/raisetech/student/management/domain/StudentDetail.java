@@ -17,7 +17,6 @@ public class StudentDetail {
   public StudentDetail() {
     this.student = new Student();
     this.studentsCourses = new ArrayList<>();
-    this.studentsCourses.add(new StudentsCourses());
   }
 
 }
