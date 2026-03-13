@@ -30,7 +30,7 @@ public class Student {
   private String region;
   private String gender;
   private String remark;
-  private boolean isDeleted;
+  private boolean deleted;
 
   public Student(){
   }
