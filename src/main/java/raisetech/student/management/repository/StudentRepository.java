@@ -40,7 +40,7 @@ public interface StudentRepository {
 
   List<StudentsCourses> searchStudentsCourses();
 
-  @Select("SELECT * FROM students WHERE id = #{id};")
+  @Select("SELECT * FROM students WHERE id = #{id}")
 
   Student findStudentById(String id);
 
@@ -62,7 +62,7 @@ public interface StudentRepository {
 
   @Update("UPDATE students_courses SET " +
           "students_id = #{studentsId}, course_name = #{courseName}, " +
-          "start_date = #{startDate}, expected_end_date = #{expectedEndDate}WHERE id = #{id} ")
+          "start_date = #{startDate}, expected_end_date = #{expectedEndDate} WHERE id = #{id} ")
   void updateStudentsCourses(StudentsCourses sc);
 
 
