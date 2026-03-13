@@ -55,14 +55,6 @@
       <label th:for="'courseName' + ${iStat.index}">コース名</label>
       <input type="text" th:id="'courseName' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].courseName}" required />
     </div>
-    <div>
-      <label th:for="'startDate' + ${iStat.index}">開始日</label>
-      <input type="date" th:id="'startDate' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].startDate}" required />
-    </div>
-    <div>
-      <label th:for="'expectedEndDate' + ${iStat.index}">終了予定日</label>
-      <input type="date" th:id="'expectedEndDate' + ${iStat.index}" th:field="*{studentsCourses[__${iStat.index}__].expectedEndDate}" required />
-    </div>
     <hr>
   </div>
   <div>
