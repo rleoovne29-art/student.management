@@ -1,18 +1,22 @@
 package raisetech.student.management.repository;
 
 import java.util.List;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+
+import org.apache.ibatis.annotations.*;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentsCourses;
 
+/**
+ * 受講生テーブルと受講生コース情報テーブルに紐づくRepositoryです。
+ */
 @Mapper
 public interface StudentRepository {
 
+  /**
+   * 受講生の全件検索を行います。
+   *
+   * @return 受講生情報(全件)
+   */
   @Select("SELECT * FROM students WHERE is_deleted = 0 ")
   @Results(id = "StudentMap", value = {
       @Result(property = "id", column = "id"),
@@ -29,6 +33,11 @@ public interface StudentRepository {
 
   List<Student> search();
 
+  /**
+   * 受講生のコース情報の全件検索を行います。
+   *
+   * @return 受講生コース情報(全件)
+   */
   @Select("SELECT * FROM students_courses")
   @Results(id = "StudentCourseMap", value = {
       @Result(property = "id", column = "id"),
@@ -40,9 +49,15 @@ public interface StudentRepository {
 
   List<StudentsCourses> searchStudentsCourses();
 
+  /**
+   * 受講生の検索を行います。
+   *
+   * @param id 受講生ID
+   * @return 受講生
+   */
   @Select("SELECT * FROM students WHERE id = #{id}")
-
-  Student findStudentById(String id);
+  @ResultMap("StudentMap")
+  Student searchStudentById(String id);
 
   @Insert(
       "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, is_deleted) " +
@@ -63,6 +78,5 @@ public interface StudentRepository {
   @Update("UPDATE students_courses SET " +
           "students_id = #{studentsId}, course_name = #{courseName} WHERE id = #{id} ")
   void updateStudentsCourses(StudentsCourses sc);
-
 
 }
