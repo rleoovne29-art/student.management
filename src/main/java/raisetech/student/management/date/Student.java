@@ -36,7 +36,6 @@ public class Student {
 
   private String nickname;
 
-  @Email(message = "メールアドレスの形式が正しくありません")
   private String email;
 
   private String region;

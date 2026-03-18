@@ -170,7 +170,7 @@ public class StudentService {
 
   /**
    * 受講コース情報を更新します。
-   * このメソッドは StudentsCourses エンティティの更新処理を
+   * このメソッドは StudentCourses エンティティの更新処理を
    * リポジトリ層へ委譲するシンプルなラッパーです。
    *
    * @param sc 更新対象の受講コース情報
