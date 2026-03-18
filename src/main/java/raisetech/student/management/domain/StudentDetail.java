@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.*;
 import raisetech.student.management.date.Student;
-import raisetech.student.management.date.StudentsCourses;
+import raisetech.student.management.date.StudentCourses;
 
 @Getter
 @Setter
@@ -13,6 +13,6 @@ import raisetech.student.management.date.StudentsCourses;
 public class StudentDetail {
 
   private Student student;
-  private List<StudentsCourses> studentsCourses;
+  private List<StudentCourses> studentCourses;
 
 }

@@ -1,20 +1,19 @@
 package raisetech.student.management.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import raisetech.student.management.controller.converter.StudentConverter;
-import raisetech.student.management.date.Student;
-import raisetech.student.management.date.StudentsCourses;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.service.StudentService;
 
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして実行されるcontrollerです。
  */
+@Validated
 @RestController
 public class StudentController {
 
@@ -49,24 +48,25 @@ public class StudentController {
   }
 
   /**
-   * 受講生登録です。
+   * 受講生の詳細の登録を行います。
    *
-   * @param studentDetail 受講生情報、受講生コース情報
-   * @return 受講生ID
+   * @param studentDetail 受講生詳細
+   * @return 登録情報を付与した受講生詳細
    */
   @PostMapping("/registerStudent")
-  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<StudentDetail> registerStudent(@RequestBody @Valid StudentDetail studentDetail) {
     StudentDetail response = service.registerStudentDetail(studentDetail);
     return ResponseEntity.ok(response);
   }
 
   /**
-   * 受講生情報更新です。
+   * 受講生詳細の更新を行います。
+   * キャンセルフラグの更新もここで行います。(論理削除)
    *
    * @param studentDetail 受講生情報
    * @return 受講生情報
    */
-  @PostMapping("/updateStudent")
+  @PutMapping("/updateStudent")
   public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
     service.updateStudentDetail(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.*;
 import raisetech.student.management.date.Student;
-import raisetech.student.management.date.StudentsCourses;
+import raisetech.student.management.date.StudentCourses;
 
 /**
  * 受講生テーブルと受講生コース情報テーブルに紐づくRepositoryです。
@@ -47,7 +47,7 @@ public interface StudentRepository {
       @Result(property = "expectedEndDate", column = "expected_end_date")
   })
 
-  List<StudentsCourses> searchStudentsCourses();
+  List<StudentCourses> searchStudentCourses();
 
   /**
    * 受講生の検索を行います。
@@ -59,24 +59,45 @@ public interface StudentRepository {
   @ResultMap("StudentMap")
   Student searchStudentById(String id);
 
+  /**
+   * 受講生を新規登録します。IDに関しては自動採番を行います。
+   *
+   * @param student　受講生
+   */
   @Insert(
       "INSERT INTO students (id, name, kana, age, nickname, email, region, gender, remark, is_deleted) " +
       "VALUES (#{id}, #{name}, #{kana}, #{age}, #{nickname}, #{email}, #{region}, #{gender}, #{remark}, false)")
   void insertStudent(Student student);
 
+  /**
+   * 受講生コース情報を新規登録します。IDに関しては自動採番を行います。
+   *
+   * @param sc 受講生コース情報
+   */
   @Insert("INSERT INTO students_courses ("
       + "id, students_id, course_name, start_date, expected_end_date) "
       + "VALUES (#{id}, #{studentsId}, #{courseName}, #{startDate}, #{expectedEndDate}) ")
-  void insertStudentsCourses(StudentsCourses sc);
+  @Options(useGeneratedKeys = true, keyProperty = "id")
+  void insertStudentCourses(StudentCourses sc);
 
+  /**
+   * 受講生を更新します。
+   *
+   * @param student 受講生
+   */
   @Update("UPDATE students SET "
       + "name = #{name}, kana = #{kana}, age = #{age}, nickname = #{nickname}, "
       + "email = #{email},region = #{region}, gender = #{gender}, "
       + "remark = #{remark}, is_deleted = #{deleted} WHERE id = #{id}")
   void updateStudent(Student student);
 
+  /**
+   * 受講生コース情報を更新します。
+   *
+   * @param sc　受講生コース情報
+   */
   @Update("UPDATE students_courses SET " +
           "students_id = #{studentsId}, course_name = #{courseName} WHERE id = #{id} ")
-  void updateStudentsCourses(StudentsCourses sc);
+  void updateStudentCourses(StudentCourses sc);
 
 }

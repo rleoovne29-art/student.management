@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="raisetech/student/management/repository/StudentRepository">
+
+    <!-- 受講生の全件検索 -->
+    <select id="search" resultType="raisetech.student.management.date.Student">
+        SELECT * FROM students WHERE is_deleted = 0
+    </select>
+
+    <!-- 受講生のコース情報の全件検索 -->
+    <select id="searchStudentCourses" resultType="raisetech.student.management.date.StudentCourses">
+        SELECT * FROM students_courses
+    </select>
+    
+    <!-- 受講生の検索 -->
+    <select id="searchStudentById" resultType="raisetech.student.management.date.Student">
+        SELECT * FROM students WHERE id = #{id}
+    </select>
+    
+    <!-- 受講生を新規登録 -->
+    <insert id="insertStudent" parameterType="raisetech.student.management.date.Student">
+        INSERT INTO students (
+        id, name, kana, age, nickname, email, region, gender, remark, is_deleted
+        ) VALUES (
+        #{id}, #{name}, #{kana}, #{age}, #{nickname}, #{email}, #{region}, #{gender}, #{remark}, false
+        )
+    </insert>
+    
+    <!-- 受講生コース情報を新規登録 -->
+    <insert id="insertStudentCourses" parameterType="raisetech.student.management.date.StudentCourses">
+        INSERT INTO students_courses (
+        id, students_id, course_name, start_date, expected_end_date
+        ) VALUES (
+        #{id}, #{studentsId}, #{courseName}, #{startDate}, #{expectedEndDate}
+        )
+    </insert>
+
+    <!-- 受講生の更新 -->
+    <update id="updateStudent" parameterType="raisetech.student.management.date.Student">
+        UPDATE students SET
+        name = #{name}, kana = #{kana}, age = #{age}, nickname = #{nickname}, 
+        "email = #{email},region = #{region}, gender = #{gender}, 
+        "remark = #{remark}, is_deleted = #{deleted} WHERE id = #{id}
+        )
+    </update>
+
+    <!-- 受講生コース情報の更新 -->
+    <update id="updateStudentCourses" parameterType="raisetech.student.management.date.StudentCourses">
+        UPDATE students_courses SET
+        students_id = #{studentsId}, course_name = #{courseName} WHERE id = #{id}
+        )
+    </update>
+    
+</mapper>

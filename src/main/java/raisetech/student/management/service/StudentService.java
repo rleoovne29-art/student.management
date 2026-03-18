@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.date.Student;
-import raisetech.student.management.date.StudentsCourses;
+import raisetech.student.management.date.StudentCourses;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.repository.StudentRepository;
 
@@ -52,8 +52,8 @@ public class StudentService {
    */
   public List<StudentDetail> searchStudentList() {
     List<Student> studentList = repository.search();
-    List<StudentsCourses> studentsCoursesList = repository.searchStudentsCourses();
-    return converter.convertStudentDetails(studentList, studentsCoursesList);
+    List<StudentCourses> studentCoursesList = repository.searchStudentCourses();
+    return converter.convertStudentDetails(studentList, studentCoursesList);
   }
 
   /**
@@ -80,7 +80,7 @@ public class StudentService {
     if (student == null) {
       return null;
     }
-    List<StudentsCourses> courses = getCoursesByStudentId(id);
+    List<StudentCourses> courses = getCoursesByStudentId(id);
 
     return buildStudentDetail(student, courses);
   }
@@ -91,8 +91,8 @@ public class StudentService {
    * @param id 受講生ID
    * @return 受講コース一覧
    */
-  private List<StudentsCourses> getCoursesByStudentId(String id) {
-    return repository.searchStudentsCourses()
+  private List<StudentCourses> getCoursesByStudentId(String id) {
+    return repository.searchStudentCourses()
             .stream()
             .filter(c -> c.getStudentsId().equals(id))
             .toList();
@@ -101,16 +101,16 @@ public class StudentService {
   /**
    * Student と Courses をまとめて StudentDetail に変換します。
    *
-   * @param student 学生情報
+   * @param student 受講生詳細
    * @param courses 受講コース一覧
-   * @return StudentDetail（学生 + コース一覧）
+   * @return StudentDetail（受講生 + コース一覧）
    */
-  private StudentDetail buildStudentDetail(Student student, List<StudentsCourses> courses) {
+  private StudentDetail buildStudentDetail(Student student, List<StudentCourses> courses) {
     return new StudentDetail(student, courses);
   }
 
   /**
-   * 学生情報を1件登録します。
+   * 受講生詳細を1件登録します。
    * このメソッドは Student エンティティを受け取り、
    * リポジトリ層へ登録処理を委譲します。
    *
@@ -129,36 +129,36 @@ public class StudentService {
    * 3. コース情報の登録
    * 4. 登録後の StudentDetail を組み立てて返却
    *
-   * @param studentDetail 登録対象の学生情報 + コース情報
-   * @return 登録後の StudentDetail（採番済みIDを含む）
+   * @param studentDetail 登録対象の受講生詳細 + コース情報
+   * @return 登録後の受講生詳細 + コース情報（採番済みIDを含む）
    */
   public StudentDetail registerStudentDetail(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
     String id = generateRandomId();
     student.setId(id);
     registerStudent(student);
-    StudentsCourses sc = studentDetail.getStudentsCourses().get(0);
+    StudentCourses sc = studentDetail.getStudentCourses().get(0);
     sc.setStudentsId(id);
-    registerStudentsCourses(sc);
+    registerStudentCourses(sc);
     return new StudentDetail(student, List.of(sc));
   }
 
   /**
-   * 受講コース情報を1件登録します。
+   * 受講コース詳細を1件登録します。
    * コースIDの採番、開始日・終了予定日の自動設定を行い、
    * リポジトリ層へ登録処理を委譲します。
    *
    * @param sc 登録対象の受講コース情報
    */
-  public void registerStudentsCourses(StudentsCourses sc) {
+  public void registerStudentCourses(StudentCourses sc) {
     sc.setId(generateRandomId());
     sc.setStartDate(LocalDateTime.now().toLocalDate());
     sc.setExpectedEndDate(LocalDateTime.now().plusYears(1).toLocalDate());
-    repository.insertStudentsCourses(sc);
+    repository.insertStudentCourses(sc);
   }
 
   /**
-   * 学生情報を更新します。
+   * 受講生詳細を更新します。
    * このメソッドは Student エンティティの更新処理を
    * リポジトリ層へ委譲するシンプルなラッパーです。
    *
@@ -175,20 +175,20 @@ public class StudentService {
    *
    * @param sc 更新対象の受講コース情報
    */
-  public void updateStudentsCourses(StudentsCourses sc) {
-    repository.updateStudentsCourses(sc);
+  public void updateStudentCourses(StudentCourses sc) {
+    repository.updateStudentCourses(sc);
   }
 
   /**
-   * StudentDetail を受け取り、学生情報と受講コース情報をまとめて更新します。
+   * StudentDetail を受け取り、受講生詳細と受講コース情報をまとめて更新します。
    *
-   * @param studentDetail 更新対象の学生情報とコース情報
+   * @param studentDetail 更新対象の受講生詳細とコース情報
    */
   public void updateStudentDetail(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
     updateStudent(student);
-    for (StudentsCourses sc : studentDetail.getStudentsCourses()) {
-      updateStudentsCourses(sc);
+    for (StudentCourses sc : studentDetail.getStudentCourses()) {
+      updateStudentCourses(sc);
     }
   }
 

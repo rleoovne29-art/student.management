@@ -16,7 +16,7 @@ import lombok.Setter;
     "expectedEndDate"
 })
 
-public class StudentsCourses {
+public class StudentCourses {
 
   private String id;
   private String studentsId;
@@ -24,7 +24,7 @@ public class StudentsCourses {
   private LocalDate startDate;
   private LocalDate expectedEndDate;
 
-  public StudentsCourses(){
+  public StudentCourses(){
   }
 
 }
