@@ -67,7 +67,7 @@ public class StudentController {
    * @return 受講生情報
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudentDetail(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
   }

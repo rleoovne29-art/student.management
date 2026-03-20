@@ -95,7 +95,7 @@ public class StudentService {
   private List<StudentCourses> getCoursesByStudentId(String id) {
     return repository.searchStudentCourses()
             .stream()
-            .filter(c -> c.getStudentsId().equals(id))
+            .filter(c -> Objects.equals(c.getStudentsId(), id))
             .toList();
   }
 

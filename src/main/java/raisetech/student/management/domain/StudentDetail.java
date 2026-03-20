@@ -2,13 +2,16 @@ package raisetech.student.management.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class StudentDetail {
 
   private Student student;
