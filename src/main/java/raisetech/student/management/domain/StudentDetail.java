@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
-import raisetech.student.management.date.StudentCourses;
 
 @Getter
 @Setter
@@ -16,8 +15,8 @@ public class StudentDetail {
   private List<StudentCourses> studentCourses;
 
   public StudentDetail(Student student, List<StudentCourses> courses) {
-    this.student = new Student();
-    this.studentCourses = new ArrayList<>();
+    this.student = student != null ? student : new Student();
+    this.studentCourses = courses != null ? courses : new ArrayList<>();
   }
 
 }
