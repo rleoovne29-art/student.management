@@ -2,7 +2,6 @@ package raisetech.student.management.service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import raisetech.student.management.controller.converter.StudentConverter;
@@ -138,10 +137,16 @@ public class StudentService {
     String id = generateRandomId();
     student.setId(id);
     registerStudent(student);
-    StudentCourses sc = studentDetail.getStudentCourses().get(0);
-    sc.setStudentsId(id);
-    registerStudentCourses(sc);
-    return new StudentDetail(student, List.of(sc));
+    List<StudentCourses> courses =
+            Optional.ofNullable(studentDetail.getStudentCourses())
+                    .orElse(Collections.emptyList());
+    List<StudentCourses> registered = new ArrayList<>();
+    for (StudentCourses sc : courses) {
+      sc.setStudentsId(id);
+      registerStudentCourses(sc);
+      registered.add(sc);
+    }
+    return new StudentDetail(student, registered);
   }
 
   /**
@@ -188,7 +193,10 @@ public class StudentService {
   public void updateStudentDetail(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
     updateStudent(student);
-    for (StudentCourses sc : studentDetail.getStudentCourses()) {
+    List<StudentCourses> courses =
+            Optional.ofNullable(studentDetail.getStudentCourses())
+                    .orElse(Collections.emptyList());
+    for (StudentCourses sc : courses) {
       updateStudentCourses(sc);
     }
   }
