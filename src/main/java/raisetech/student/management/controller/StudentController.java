@@ -3,11 +3,14 @@ package raisetech.student.management.controller;
 import java.util.List;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import raisetech.student.management.domain.StudentDetail;
+import raisetech.student.management.exception.TestException;
 import raisetech.student.management.service.StudentService;
 
 /**
@@ -31,8 +34,9 @@ public class StudentController {
    * @return 受講生一覧(全件)
    */
   @GetMapping("/studentList")
-  public List<StudentDetail> getStudentList() {
-    return service.searchStudentList();
+  public List<StudentDetail> getStudentList() throws  TestException {
+    throw new TestException("現在のこのAPIは使用できません。URLは「studentList」ではなく、「students」を利用してください。");
+    //return service.searchStudentList();
   }
 
   /**
@@ -43,8 +47,19 @@ public class StudentController {
    * @return 受講生
    */
   @GetMapping("/student/{id}")
-  public StudentDetail getStudent(@PathVariable String id) {
+  public StudentDetail getStudent(
+          @PathVariable @NotBlank @Pattern(regexp = "^\\d+$") String id) {
     return service.getStudentDetail(id);
+  }
+
+  /**
+   * 例外処理の練習用です。
+   * @return HTTP/1.1 400 Bad Request 練習用のエラーです
+   * @throws TestException
+   */
+  @GetMapping("/test-error")
+  public String testError() throws TestException {
+    throw new TestException("練習用のエラーです");
   }
 
   /**
