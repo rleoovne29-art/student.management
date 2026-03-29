@@ -1,20 +1,23 @@
 package raisetech.student.management.exception;
 
-public class TestException extends Exception{
-    public TestException() {
-        super();
-    }
 
-    public TestException(String message) {
+public class TestException extends RuntimeException{
+
+    private final String field;
+    private final Object rejectedValue;
+
+    public TestException(String field, Object rejectedValue, String message) {
         super(message);
+        this.field = field;
+        this.rejectedValue = rejectedValue;
     }
 
-    public TestException(String message, Throwable cause) {
-        super(message, cause);
+    public String getField() {
+        return field;
     }
 
-    public TestException(Throwable cause) {
-        super(cause);
+    public Object getRejectedValue() {
+        return rejectedValue;
     }
 
 }

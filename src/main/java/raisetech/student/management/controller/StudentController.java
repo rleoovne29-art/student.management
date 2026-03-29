@@ -35,7 +35,11 @@ public class StudentController {
    */
   @GetMapping("/studentList")
   public List<StudentDetail> getStudentList() throws  TestException {
-    throw new TestException("現在のこのAPIは使用できません。URLは「studentList」ではなく、「students」を利用してください。");
+    throw new TestException(
+            "global",
+            null,
+            "現在のこのAPIは使用できません。URLは「studentList」ではなく、「students」を利用してください。"
+    );
     //return service.searchStudentList();
   }
 
@@ -59,7 +63,11 @@ public class StudentController {
    */
   @GetMapping("/test-error")
   public String testError() throws TestException {
-    throw new TestException("練習用のエラーです");
+    throw new TestException(
+            null,
+            null,
+            "練習用のエラーです"
+    );
   }
 
   /**
