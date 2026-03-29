@@ -35,7 +35,7 @@ public class Student {
   private String kana;
 
   @Min(value = 1, message = "年齢は1以上で入力してください")
-  private int age;
+  private Integer age;
 
   @NotBlank
   private String nickname;

@@ -6,6 +6,11 @@ import raisetech.student.management.domain.ErrorDetail;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * API のエラーレスポンス全体を表す DTO です。
+ * ステータスコード、外側メッセージ、エラー詳細のリストを保持します。
+ * errors は null の場合、JSON に出力されません。
+ */
 @Getter
 public class ErrorResponse {
 

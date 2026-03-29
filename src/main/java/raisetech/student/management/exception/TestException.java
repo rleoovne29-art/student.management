@@ -1,6 +1,10 @@
 package raisetech.student.management.exception;
 
-
+/**
+ * 業務ロジック上のエラーを表すカスタム例外です。
+ * 任意のフィールド名と拒否された値を保持でき、
+ * バリデーション以外のドメインエラーにも柔軟に対応できます。
+ */
 public class TestException extends RuntimeException{
 
     private final String field;
