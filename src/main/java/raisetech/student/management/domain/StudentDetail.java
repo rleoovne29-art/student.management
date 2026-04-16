@@ -11,7 +11,6 @@ import raisetech.student.management.date.StudentCourses;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class StudentDetail {
 
   @Valid
