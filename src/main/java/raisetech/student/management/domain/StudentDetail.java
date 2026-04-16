@@ -3,11 +3,13 @@ package raisetech.student.management.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.*;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
 
+@Schema(description = "受講生詳細")
 @Getter
 @Setter
 @NoArgsConstructor
