@@ -3,9 +3,8 @@ package raisetech.student.management.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.Valid;
+import lombok.*;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
 
@@ -14,12 +13,9 @@ import raisetech.student.management.date.StudentCourses;
 @NoArgsConstructor
 public class StudentDetail {
 
+  @Valid
   private Student student;
-  private List<StudentCourses> studentCourses;
-
-  public StudentDetail(Student student, List<StudentCourses> courses) {
-    this.student = student != null ? student : new Student();
-    this.studentCourses = courses != null ? courses : new ArrayList<>();
-  }
+  @Valid
+  private List<StudentCourses> studentCourses = new ArrayList<>();
 
 }
