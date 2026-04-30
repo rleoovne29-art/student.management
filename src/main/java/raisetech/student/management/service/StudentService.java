@@ -1,8 +1,7 @@
 package raisetech.student.management.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import raisetech.student.management.controller.converter.StudentConverter;
@@ -10,6 +9,7 @@ import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
 import raisetech.student.management.domain.StudentDetail;
 import raisetech.student.management.repository.StudentRepository;
+
 
 /**
  * 受講生情報を釣り扱うサービスです。
@@ -94,7 +94,7 @@ public class StudentService {
   private List<StudentCourses> getCoursesByStudentId(String id) {
     return repository.searchStudentCourses()
             .stream()
-            .filter(c -> c.getStudentsId().equals(id))
+            .filter(c -> Objects.equals(c.getStudentsId(), id))
             .toList();
   }
 
@@ -137,10 +137,16 @@ public class StudentService {
     String id = generateRandomId();
     student.setId(id);
     registerStudent(student);
-    StudentCourses sc = studentDetail.getStudentCourses().get(0);
-    sc.setStudentsId(id);
-    registerStudentCourses(sc);
-    return new StudentDetail(student, List.of(sc));
+    List<StudentCourses> courses =
+            Optional.ofNullable(studentDetail.getStudentCourses())
+                    .orElse(Collections.emptyList());
+    List<StudentCourses> registered = new ArrayList<>();
+    for (StudentCourses sc : courses) {
+      sc.setStudentsId(id);
+      registerStudentCourses(sc);
+      registered.add(sc);
+    }
+    return new StudentDetail(student, registered);
   }
 
   /**
@@ -187,7 +193,10 @@ public class StudentService {
   public void updateStudentDetail(StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
     updateStudent(student);
-    for (StudentCourses sc : studentDetail.getStudentCourses()) {
+    List<StudentCourses> courses =
+            Optional.ofNullable(studentDetail.getStudentCourses())
+                    .orElse(Collections.emptyList());
+    for (StudentCourses sc : courses) {
       updateStudentCourses(sc);
     }
   }
