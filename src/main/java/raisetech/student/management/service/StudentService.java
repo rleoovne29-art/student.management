@@ -83,9 +83,6 @@ public class StudentService {
     }
 
     List<StudentCourses> courses = getCoursesByStudentId(id);
-    if (courses == null) {
-      throw new SomeException("コース情報が取得できません");
-    }
     return buildStudentDetail(student, courses);
   }
 
@@ -95,9 +92,12 @@ public class StudentService {
    * @param id 受講生ID
    * @return 受講コース一覧
    */
-  public List<StudentCourses> getCoursesByStudentId(String id) {
-    return repository.searchStudentCourses()
-            .stream()
+  private List<StudentCourses> getCoursesByStudentId(String id) {
+    List<StudentCourses> all = repository.searchStudentCourses();
+    if (all == null) {
+      throw new SomeException("コース情報が取得できません");
+    }
+    return all.stream()
             .filter(c -> c.getStudentsId().equals(id))
             .toList();
   }
@@ -109,7 +109,7 @@ public class StudentService {
    * @param courses 受講コース一覧
    * @return StudentDetail（受講生 + コース一覧）
    */
-  public StudentDetail buildStudentDetail(Student student, List<StudentCourses> courses) {
+  private StudentDetail buildStudentDetail(Student student, List<StudentCourses> courses) {
     return new StudentDetail(student, courses);
   }
 

@@ -1,11 +1,10 @@
 package raisetech.student.management.service;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.date.Student;
@@ -30,10 +29,12 @@ class StudentServiceTest {
     @Mock
     private StudentConverter converter;
 
-    @Spy
-    @InjectMocks
     private StudentService sut;
 
+    @BeforeEach
+    void before(){
+        sut = new StudentService(repository, converter);
+    }
 
     @Test
     void ランダムID生成_8文字で構成され許可された文字のみで構成されること() {
@@ -49,8 +50,6 @@ class StudentServiceTest {
             assertTrue(chars.contains(String.valueOf(c)));
         }
     }
-
-
 
     @Test
     void 受講生詳細の一覧検索_リポジトリとコンバーターの処理が適切に呼び出せていること(){
@@ -86,70 +85,47 @@ class StudentServiceTest {
     @Test
     void 受講生検索_受講生IDから受講生情報と受講コース情報を取得してまとめて返すこと(){
         Student student = new Student();
-        List<StudentCourses> courses = List.of(new StudentCourses());
-        StudentDetail expectedDetail = new StudentDetail();
-        when(sut.searchStudentById("1")).thenReturn(student);
-        when(sut.getCoursesByStudentId("1")).thenReturn(courses);
-        when(sut.buildStudentDetail(student, courses)).thenReturn(expectedDetail);
-        StudentDetail actual = sut.getStudentDetail("1");
-        assertSame(expectedDetail, actual);
+        student.setId("1");
+        when(repository.searchStudentById("1")).thenReturn(student);
 
-        verify(sut, times(1)).searchStudentById("1");
-        verify(sut, times(1)).getCoursesByStudentId("1");
-        verify(sut, times(1)).buildStudentDetail(student, courses);
+        StudentCourses c1 = new StudentCourses();
+        c1.setStudentsId("1");
+
+        StudentCourses c2 = new StudentCourses();
+        c2.setStudentsId("2");
+
+        List<StudentCourses> allCourses = List.of(c1, c2);
+        when(repository.searchStudentCourses()).thenReturn(allCourses);
+
+        StudentDetail actual = sut.getStudentDetail("1");
+
+        assertSame(student, actual.getStudent());
+        assertEquals(1, actual.getStudentCourses().size());
+        assertSame(c1, actual.getStudentCourses().get(0));
+
+        verify(repository, times(1)).searchStudentById("1");
+        verify(repository, times(1)).searchStudentCourses();
     }
 
     @Test
     void 受講生検索_受講生が存在しない場合は学生情報と受講コース情報を返さずにnullを返すこと(){
-        when(sut.searchStudentById("1")).thenReturn(null);
+        when(repository.searchStudentById("1")).thenReturn(null);
         StudentDetail actual = sut.getStudentDetail("1");
-        Assertions.assertNull(actual);
-        verify(sut, times(1)).searchStudentById("1");
-        verify(sut, never()).getCoursesByStudentId("1");
-        verify(sut, never()).buildStudentDetail(any(), any());
+        assertNull(actual);
+        verify(repository, never()).searchStudentCourses();
     }
 
     @Test
     void 受講生検索_受講生が存在するが受講生コースが存在しない場合は例外を返すこと() {
         Student student = new Student();
-        when(sut.searchStudentById("1")).thenReturn(student);
-        when(sut.getCoursesByStudentId("1"))
-                .thenThrow(new SomeException("コース情報が取得できません"));
+        student.setId("1");
+        when(repository.searchStudentById("1")).thenReturn(student);
+        when(repository.searchStudentCourses()).thenReturn(null);
 
         assertThrows(SomeException.class, () -> sut.getStudentDetail("1"));
 
-        verify(sut, times(1)).searchStudentById("1");
-        verify(sut, times(1)).getCoursesByStudentId("1");
-        verify(sut, never()).buildStudentDetail(any(), any());
-    }
-
-    @Test
-    void 受講生検索_指定IDのコースだけが返ること() {
-        StudentCourses c1 = new StudentCourses();
-        c1.setStudentsId("1");
-        c1.setCourseName(" ");
-
-        StudentCourses c2 = new StudentCourses();
-        c2.setStudentsId("2");
-        c2.setCourseName(" ");
-
-        List<StudentCourses> allCourses = List.of(c1, c2);
-        when(repository.searchStudentCourses()).thenReturn(allCourses);
-        List<StudentCourses> result = sut.getCoursesByStudentId("1");
-        assertEquals(1, result.size());
-        assertEquals("1", result.get(0).getStudentsId());
+        verify(repository, times(1)).searchStudentById("1");
         verify(repository, times(1)).searchStudentCourses();
-    }
-
-    @Test
-    void 受講生検索_渡した受講生詳細と受講コースがそのまま入ること(){
-        Student student = new Student();
-        List<StudentCourses> courses = List.of(new StudentCourses());
-
-        StudentDetail result = sut.buildStudentDetail(student, courses);
-
-        assertSame(student, result.getStudent());
-        assertSame(courses, result.getStudentCourses());
     }
 
     @Test
@@ -164,26 +140,24 @@ class StudentServiceTest {
         Student student = new Student();
         StudentCourses sc = new StudentCourses();
         StudentDetail input = new StudentDetail(student, List.of(sc));
-        when(sut.generateRandomId()).thenReturn("XP001");
-
         StudentDetail result = sut.registerStudentDetail(input);
 
-        assertEquals("XP001", student.getId());
-        assertEquals("XP001", sc.getStudentsId());
+        String generatedId = student.getId();
+        assertNotNull(generatedId);
+        assertEquals(generatedId, sc.getStudentsId());
         assertSame(student, result.getStudent());
         assertSame(sc, result.getStudentCourses().get(0));
 
-        verify(sut, times(1)).registerStudent(student);
-        verify(sut, times(1)).registerStudentCourses(sc);
+        verify(repository, times(1)).insertStudent(student);
+        verify(repository, times(1)).insertStudentCourses(sc);
     }
 
     @Test
     void 受講生登録_受講コース詳細を受け取りリポジトリが1回呼ばれること(){
         StudentCourses sc = new StudentCourses();
-        when(sut.generateRandomId()).thenReturn("XP001");
         sut.registerStudentCourses(sc);
 
-        assertEquals("XP001", sc.getId());
+        assertNotNull(sc.getId());
         assertEquals(LocalDate.now(), sc.getStartDate());
         assertEquals(LocalDate.now().plusYears(1), sc.getExpectedEndDate());
 
@@ -213,8 +187,8 @@ class StudentServiceTest {
 
         sut.updateStudentDetail(input);
 
-        verify(sut, times(1)).updateStudent(student);
-        verify(sut, times(1)).updateStudentCourses(sc);
+        verify(repository, times(1)).updateStudent(student);
+        verify(repository, times(1)).updateStudentCourses(sc);
     }
 
 }
