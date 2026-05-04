@@ -9,6 +9,7 @@ import raisetech.student.management.controller.converter.StudentConverter;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
 import raisetech.student.management.domain.StudentDetail;
+import raisetech.student.management.exception.SomeException;
 import raisetech.student.management.repository.StudentRepository;
 
 /**
@@ -80,8 +81,11 @@ public class StudentService {
     if (student == null) {
       return null;
     }
-    List<StudentCourses> courses = getCoursesByStudentId(id);
 
+    List<StudentCourses> courses = getCoursesByStudentId(id);
+    if (courses == null) {
+      throw new SomeException("コース情報が取得できません");
+    }
     return buildStudentDetail(student, courses);
   }
 
@@ -91,7 +95,7 @@ public class StudentService {
    * @param id 受講生ID
    * @return 受講コース一覧
    */
-  private List<StudentCourses> getCoursesByStudentId(String id) {
+  public List<StudentCourses> getCoursesByStudentId(String id) {
     return repository.searchStudentCourses()
             .stream()
             .filter(c -> c.getStudentsId().equals(id))
@@ -105,7 +109,7 @@ public class StudentService {
    * @param courses 受講コース一覧
    * @return StudentDetail（受講生 + コース一覧）
    */
-  private StudentDetail buildStudentDetail(Student student, List<StudentCourses> courses) {
+  public StudentDetail buildStudentDetail(Student student, List<StudentCourses> courses) {
     return new StudentDetail(student, courses);
   }
 
