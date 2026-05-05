@@ -21,8 +21,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(StudentController.class)
 class StudentControllerTest {
@@ -150,6 +149,23 @@ class StudentControllerTest {
 
         verify(service).updateStudentDetail(any());
 
+    }
+
+    @Test
+    void 受講生詳細の受講生で適切な値を入力した時に入力チェックに異常が発生しないこと(){
+        Student student = new Student();
+        student.setId("1");
+        student.setName("無馬かな");
+        student.setKana("なしまかな");
+        student.setAge(25);
+        student.setNickname("なしま");
+        student.setEmail("nasima@example.com");
+        student.setRegion("東京");
+        student.setGender("male");
+
+        Set<ConstraintViolation<Student>> violations = validator.validate(student);
+
+        assertThat(violations.size()).isEqualTo(0);
     }
 
     @Test
