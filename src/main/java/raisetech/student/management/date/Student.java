@@ -27,16 +27,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class Student {
 
-  @Pattern(regexp = "^\\d+$")
+  @Pattern(regexp = "^\\d+$", message = "数字のみ入力するようにしてください。")
   private String id;
 
-  @NotBlank(message = "名前は必須です")
+  @NotBlank(message = "名前は必須です。")
   private String name;
 
   @NotBlank
   private String kana;
 
-  @Min(value = 1, message = "年齢は1以上で入力してください")
+  @Min(value = 1, message = "年齢は1以上で入力してください。")
   private Integer age;
 
   @NotBlank
