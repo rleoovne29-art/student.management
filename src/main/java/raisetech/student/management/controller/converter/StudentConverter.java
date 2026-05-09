@@ -1,6 +1,9 @@
 package raisetech.student.management.controller.converter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import raisetech.student.management.date.Student;
 import raisetech.student.management.date.StudentCourses;
@@ -52,22 +55,25 @@ public class StudentConverter {
    * @param studentCourses 受講生コース情報のリスト
    * @return 受講生詳細情報のリスト
    */
-  public List<StudentDetail> convertStudentDetails(
-          List<Student> students,
-          List<StudentCourses> studentCourses) {
+  public List<StudentDetail> convertStudentDetails(List<Student> students,
+      List<StudentCourses> studentCourses) {
+    List<Student> safeStudents =
+            (students == null) ? Collections.emptyList() : students;
+    List<StudentCourses> safeCourses =
+            (studentCourses == null) ? Collections.emptyList() : studentCourses;
 
-    Map<String, List<StudentCourses>> map = toMap(studentCourses);
+    List<StudentDetail> studentDetails = new ArrayList<>();
+    safeStudents.forEach(student -> {
+      StudentDetail studentDetail = new StudentDetail();
+      studentDetail.setStudent(student);
 
-    List<StudentDetail> details = new ArrayList<>();
+      List<StudentCourses> convertStudentCourses = safeCourses.stream()
+          .filter(studentCourse -> student.getId().equals(studentCourse.getStudentsId()))
+          .collect(Collectors.toList());
 
-    for (Student student : students) {
-      List<StudentCourses> courses =
-              Optional.ofNullable(map.get(student.getId()))
-                      .orElse(Collections.emptyList());
-
-      details.add(new StudentDetail(student, courses));
-    }
-
-    return details;
+      studentDetail.setStudentCourses(convertStudentCourses);
+      studentDetails.add(studentDetail);
+    });
+    return studentDetails;
   }
 }
