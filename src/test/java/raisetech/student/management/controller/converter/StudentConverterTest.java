@@ -14,13 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StudentConverterTest {
 
-    private StudentConverter sut;
-
-    @BeforeEach
-    void before(){
-        sut = new StudentConverter();
-    }
-
     @DisplayName("受講生1人に紐づくコース情報だけがセットされること")
     @Test
     void convertStudentDetails_shouldAssignCoursesOnlyToMatchingStudents_whenSomeMatch(){
