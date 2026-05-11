@@ -60,7 +60,7 @@ public interface StudentRepository {
   Student searchStudentById(String id);
 
   /**
-   * 受講生を新規登録します。IDに関しては自動採番を行います。
+   * 受講生を新規登録します。
    *
    * @param student　受講生
    */
@@ -70,7 +70,7 @@ public interface StudentRepository {
   void insertStudent(Student student);
 
   /**
-   * 受講生コース情報を新規登録します。IDに関しては自動採番を行います。
+   * 受講生コース情報を新規登録します。
    *
    * @param sc 受講生コース情報
    */
