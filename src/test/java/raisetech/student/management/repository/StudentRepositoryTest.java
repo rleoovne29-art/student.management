@@ -1,6 +1,7 @@
 package raisetech.student.management.repository;
 
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +19,38 @@ class StudentRepositoryTest {
     @Autowired
     private StudentRepository sut;
 
+    @DisplayName("受講生の全件検索が行えること")
     @Test
-    void 受講生の全件検索が行えること(){
+    void searchAllStudents_returnsAllRecords(){
         List<Student> actual = sut.search();
         assertThat(actual.size()).isEqualTo(5);
+        assertThat(actual)
+                .extracting(Student::getId)
+                .contains("stu1", "stu2", "stu3", "stu4", "stu5");
+        Student first = actual.stream()
+                .filter(s -> s.getId().equals("stu1"))
+                .findFirst()
+                .orElseThrow();
+        assertThat(first.getName()).isEqualTo("山田太郎");
     }
 
+    @DisplayName("受講生コース情報の全件検索が行えること")
     @Test
-    void 受講生コース情報の全件検索が行えること(){
+    void searchAllStudentsCourses_returnsAllRecords(){
         List<StudentCourses> actual = sut.searchStudentCourses();
         assertThat(actual.size()).isEqualTo(5);
     }
 
+    @DisplayName("受講生の検索が１件だけ返ること")
     @Test
-    void 受講生の検索が１件だけ返ること(){
+    void searchStudentById_returnsOneRecord(){
         Student actual = sut.searchStudentById("stu1");
         assertThat(actual).isNotNull();
     }
 
+    @DisplayName("受講生の登録が行えること")
     @Test
-    void 受講生の登録が行えること(){
+    void insertStudent_savesNewStudent(){
         Student student = new Student();
         student.setId("stu10");
         student.setName("無馬かな");
@@ -55,8 +68,9 @@ class StudentRepositoryTest {
         assertThat(actual.size()).isEqualTo(6);
     }
 
+    @DisplayName("受講生コース情報の登録が行えること")
     @Test
-    void 受講生コース情報の登録が行えること(){
+    void insertStudentCourses_savesNewCourse(){
         StudentCourses course = new StudentCourses();
         course.setId("crs6");
         course.setStudentsId("stu1");
@@ -69,8 +83,9 @@ class StudentRepositoryTest {
         assertThat(actual.size()).isEqualTo(6);
     }
 
+    @DisplayName("受講生情報の更新が行えること")
     @Test
-    void 受講生情報の更新が行えること(){
+    void updateStudent_updatesStudentInfo(){
         Student student = new Student();
         student.setId("stu1");
         student.setName("山田太郎");
@@ -92,8 +107,9 @@ class StudentRepositoryTest {
         assertThat(actual.getRegion()).isEqualTo("大阪");
     }
 
+    @DisplayName("受講生コース情報の更新が行えること")
     @Test
-    void 受講生コース情報の更新が行えること(){
+    void updateStudentCourses_updatesCourseInfo(){
         StudentCourses course = new StudentCourses();
         course.setId("crs1");
         course.setStudentsId("stu1");
