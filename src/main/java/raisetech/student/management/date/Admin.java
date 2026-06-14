@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 })
 
 public class Admin {
-    private String id;
+    private Long id;
     private String name;
     private String email;
     private String password;

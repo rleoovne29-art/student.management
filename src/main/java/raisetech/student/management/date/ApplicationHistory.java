@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 })
 
 public class ApplicationHistory {
-    private String id;
-    private String applicationId;
+    private Long id;
+    private Long applicationId;
     private String status;
     private LocalDateTime changedAt;
-    private String changedBy;
+    private Long changedBy;
     private String remark;
 }

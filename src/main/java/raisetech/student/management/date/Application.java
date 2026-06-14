@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 })
 
 public class Application {
-    private  String id;
+    private Long id;
     private String studentsCoursesId;
     private String status;
     private LocalDateTime createdAt;
