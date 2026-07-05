@@ -51,7 +51,7 @@ public class ApplicationService {
         history.setApplicationId(application.getId());
         history.setStatus(application.getStatus());
         history.setRemark(remark);
-        history.setChangedBy("admin");
+        history.setChangedBy(1L);
         applicationHistoryRepository.insert(history);
     }
 }

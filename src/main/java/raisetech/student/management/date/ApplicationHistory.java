@@ -25,6 +25,6 @@ public class ApplicationHistory {
     private Long applicationId;
     private String status;
     private LocalDateTime changedAt;
-    private String changedBy;
+    private Long changedBy;
     private String remark;
 }
