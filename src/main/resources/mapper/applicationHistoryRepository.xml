@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="raisetech/student/management/repository/ApplicationHistoryRepository">
+
+    <!-- 履歴登録 -->
+    <insert id="insert">
+        INSERT INTO application_histories (
+        application_id,
+        status,
+        remark,
+        changed_by,
+        changed_at
+        ) VALUES (
+        #{applicationId},
+        #{status},
+        #{remark},
+        #{changedBy},
+        NOW()
+        )
+    </insert>
+
+    <!-- 履歴一覧（新しい順） -->
+    <select id="findByApplicationIdOrderByChangedAtDesc"
+            resultType="raisetech.student.management.date.ApplicationHistory">
+        SELECT
+        id,
+        application_id,
+        status,
+        remark,
+        changed_by,
+        changed_at
+        FROM application_histories
+        WHERE application_id = #{applicationId}
+        ORDER BY changed_at DESC
+    </select>
+    
+</mapper>
