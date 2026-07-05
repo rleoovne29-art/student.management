@@ -15,6 +15,7 @@ public interface ApplicationHistoryRepository {
             "(application_id, status, changed_at, changed_by, remark)" +
             "VALUES (#{applicationId}, #{status}, NOW(), #{changedBy}, #{remark})")
     void insert(ApplicationHistory history);
+    List<ApplicationHistory> findByApplicationIdOrderByChangedAtDesc(Long applicationId);
 
     /**
      * 最新の履歴を１件取得します。
